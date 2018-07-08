@@ -34,13 +34,6 @@
 			<version>4.1.0.RELEASE</version>
 		</dependency>
 		
-		<!-- JPA, 하이버네이트 -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.3.10.Final</version>
-		</dependency>
-		
 		<!-- H2 데이터베이스 -->
 		<dependency>
 		    <groupId>com.h2database</groupId>
@@ -48,6 +41,21 @@
 		    <version>1.4.197</version>
 		    <scope>test</scope>
 		</dependency>
+		
+		<!-- MySQL -->
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>5.1.6</version>
+		</dependency>
+
+		<!-- JPA, 하이버네이트 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.3.10.Final</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

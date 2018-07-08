@@ -97,7 +97,7 @@ public class JPAMapper {
 			bResult = true;
 			
 		} catch (Exception e) {
-			tx.rollback();
+			rollback(tx);
 			throw e;
 			
 		} finally {
@@ -197,7 +197,7 @@ public class JPAMapper {
 			bResult = true;
 			
 		} catch (Exception e) {
-			tx.rollback();
+			rollback(tx);
 			throw e;
 			
 		} finally {
@@ -299,7 +299,7 @@ public class JPAMapper {
 			bResult = true;
 			
 		} catch (Exception e) {
-			tx.rollback();
+			rollback(tx);
 			throw e;
 			
 		} finally {

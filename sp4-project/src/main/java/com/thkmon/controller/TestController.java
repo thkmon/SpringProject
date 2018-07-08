@@ -18,20 +18,20 @@ public class TestController {
 //		JPATest jpaMain = new JPATest();
 //		jpaMain.insertTest();
 		
-//		try {
-//			Member member = new Member();
-//			member.setId("id1");
-//			member.setAge(100);
-//			member.setUserName("wewewe");
-//			
-//			JPAMapper.getInstance().insert(Member.class, member);
-//			
-//		} catch (MsgException e) {
-//			System.err.println(e.getMessage());
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			Member member = new Member();
+			member.setId("id1");
+			member.setAge(100);
+			member.setUserName("wewewe");
+			
+			JPAMapper.getInstance().insert(Member.class, member);
+			
+		} catch (MsgException e) {
+			System.err.println(e.getMessage());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 //		
 		
 		try {
