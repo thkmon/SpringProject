@@ -1,4 +1,4 @@
-package com.thkmon.jpa.data;
+package com.thkmon.database.data;
 
 import javax.persistence.*;
 

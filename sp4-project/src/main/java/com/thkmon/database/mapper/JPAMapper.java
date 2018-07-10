@@ -1,4 +1,4 @@
-package com.thkmon.jpa.mapper;
+package com.thkmon.database.mapper;
 
 import java.lang.reflect.Field;
 

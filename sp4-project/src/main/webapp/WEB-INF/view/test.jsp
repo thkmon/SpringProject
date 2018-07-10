@@ -5,7 +5,7 @@
 <title>Test</title>
 </head>
 <body>
-<!-- 기동후 http://localhost:8080/sp4-project/test?name=temp 로 접속가능 -->
+<!-- 기동후 http://localhost:8080/test?name=temp 로 접속가능 -->
 인사말: ${greeting}
 </body>
 </html>

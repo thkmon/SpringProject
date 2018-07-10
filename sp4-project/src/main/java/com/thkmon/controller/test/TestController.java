@@ -1,13 +1,13 @@
-package com.thkmon.controller;
+package com.thkmon.controller.test;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.thkmon.database.data.Member;
+import com.thkmon.database.mapper.JPAMapper;
 import com.thkmon.exception.MsgException;
-import com.thkmon.jpa.data.Member;
-import com.thkmon.jpa.mapper.JPAMapper;
 
 @Controller
 public class TestController {
@@ -67,5 +67,12 @@ public class TestController {
 		
 		model.addAttribute("greeting", "안녕하세요, " + name);
 		return "test";
+	}
+	
+	
+	@RequestMapping("/test/upload")
+	public String testUpload(Model model, @RequestParam(value = "name", required = false) String name) {
+		// model.addAttribute("greeting", "안녕하세요, " + name);
+		return "test/upload";
 	}
 }

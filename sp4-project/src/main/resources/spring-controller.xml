@@ -5,6 +5,11 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean class="com.thkmon.controller.TestController" />
-	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="52428800"></property>
+	</bean>
+
+	<bean class="com.thkmon.controller.init.InitController" init-method="init"/>
+	<bean class="com.thkmon.controller.test.TestController" />
+	<bean class="com.thkmon.controller.file.FileUploadController" />
 </beans>
