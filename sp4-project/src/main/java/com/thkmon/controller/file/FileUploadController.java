@@ -1,9 +1,10 @@
 package com.thkmon.controller.file;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.Field;
+import java.sql.Blob;
 import java.util.Iterator;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.thkmon.database.data.DdocBlobInfo;
+import com.thkmon.database.mapper.JPAMapper;
 import com.thkmon.util.date.DateUtil;
 import com.thkmon.util.string.StringUtil;
 
 @Controller
 public class FileUploadController {
-	
 	
 	@RequestMapping("/file/upload")
 	public String fileUpload(HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -91,7 +93,7 @@ public class FileUploadController {
 			System.out.println("FileUploadController fileUpload (getOriginFilePath) : " + e.getMessage());
 		}
 		
-		String basePath = "bbisking/cache/";
+		String basePath = "ddoc/cache/";
 		String destinationPath = dateTime.substring(0, 4) + "/" + dateTime.substring(4, 6) + "/" + dateTime.substring(6, 8) + "/";
 		String cacheFileName = dateTimeMilSec + dotAndExt;
 		
@@ -100,14 +102,19 @@ public class FileUploadController {
 			dir.mkdirs();
 		}
 		
-		File resultFile = new File(basePath + destinationPath + cacheFileName);
-		mFile.transferTo(resultFile);
+		File fileObj = new File(basePath + destinationPath + cacheFileName);
+		mFile.transferTo(fileObj);
+		
+		if (!fileObj.exists()) {
+			throw new Exception("FileUploadController fileUpload : file not exists");
+		}
 		
 		String blobId = dateTimeMilSec;
-		long fileSize = resultFile.length();
+		long fileSize = fileObj.length();
 		String regTime = dateTime;
 		originFilePath = StringUtil.revisePath(originFilePath);
-		String cacheFilePath = StringUtil.revisePath(resultFile.getAbsolutePath());
+		String cacheFilePath = StringUtil.revisePath(fileObj.getAbsolutePath());
+		String isDelete = "0";
 		
 		System.out.println(" BLOB_ID           : " + blobId);
 		System.out.println(" FILE_BLOB         : " + "");
@@ -117,5 +124,66 @@ public class FileUploadController {
 		System.out.println(" ORIGIN_FILE_PATH  : " + originFilePath);
 		System.out.println(" CACHE_FILE_NAME   : " + cacheFileName);
 		System.out.println(" CACHE_FILE_PATH   : " + cacheFilePath);
+		System.out.println(" IS_DELETE         : " + isDelete);
+		
+//		byte[] fileBlob = convertFileToBlob(resultFile);
+		
+		Blob blob = convertFileToBlob(fileObj);
+		if (blob == null) {
+			throw new Exception("FileUploadController fileUpload : blob is null");
+		}
+		
+		DdocBlobInfo ddocBlobInfo = new DdocBlobInfo();
+		ddocBlobInfo.setBlobId(blobId);
+		ddocBlobInfo.setFileBlob(blob);
+		ddocBlobInfo.setFileSize(String.valueOf(fileSize));
+		ddocBlobInfo.setRegTime(regTime);
+		ddocBlobInfo.setOriginFileName(originFileName);
+		ddocBlobInfo.setOriginFilePath(originFilePath);
+		ddocBlobInfo.setCacheFileName(cacheFileName);
+		ddocBlobInfo.setCacheFilePath(cacheFilePath);
+		ddocBlobInfo.setIsDelete(isDelete);
+		
+		JPAMapper.getInstance().insert(DdocBlobInfo.class, ddocBlobInfo);
+		
 	}
+	
+	
+	private Blob convertFileToBlob(File file) throws Exception {
+		
+		Blob blob = null;
+		FileInputStream inputStream = null;
+		
+		try {
+			byte[] byteArray = new byte[(int) file.length()];
+			inputStream = new FileInputStream(file);
+			inputStream.read(byteArray);
+			
+			blob = new javax.sql.rowset.serial.SerialBlob(byteArray); 
+			
+		} catch (Exception e) {
+			throw e;
+			
+		} finally {
+			close(inputStream);
+		}
+		
+		return blob;
+	}
+	
+	
+	private void close(FileInputStream obj) {
+		try {
+			if (obj != null) {
+				obj.close();
+			}
+			
+		} catch (Exception e) {
+			obj = null;
+			
+		} finally {
+			obj = null;
+		}
+	}
+
 }
