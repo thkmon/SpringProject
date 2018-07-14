@@ -2,41 +2,40 @@ package com.thkmon.database.data;
 
 import java.sql.Blob;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.thkmon.database.annotation.DataColumn;
+import com.thkmon.database.annotation.DataPrimaryKey;
+import com.thkmon.database.annotation.DataTable;
+import com.thkmon.database.prototype.Data;
 
-@Entity
-@Table(name = "DDOC_BLOB_INFO")
-public class DdocBlobInfo {
-
-	@Id
-	@Column(name = "BLOB_ID")
+@DataTable(name = "DDOC_BLOB_INFO")
+public class DdocBlobInfo implements Data {
+	
+	@DataPrimaryKey(name = "BLOB_ID")
+	@DataColumn(name = "BLOB_ID")
 	private String blobId = "";
 	
-	@Column(name = "FILE_BLOB")
+	@DataColumn(name = "FILE_BLOB")
 	private Blob fileBlob = null;
 	
-	@Column(name = "FILE_SIZE")
+	@DataColumn(name = "FILE_SIZE")
 	private String fileSize = "";
 	
-	@Column(name = "REG_TIME")
+	@DataColumn(name = "REG_TIME")
 	private String regTime = "";
 	
-	@Column(name = "ORIGIN_FILE_NAME")
+	@DataColumn(name = "ORIGIN_FILE_NAME")
 	private String originFileName = "";
 	
-	@Column(name = "ORIGIN_FILE_PATH")
+	@DataColumn(name = "ORIGIN_FILE_PATH")
 	private String originFilePath = "";
 	
-	@Column(name = "CACHE_FILE_NAME")
+	@DataColumn(name = "CACHE_FILE_NAME")
 	private String cacheFileName = "";
 	
-	@Column(name = "CACHE_FILE_PATH")
+	@DataColumn(name = "CACHE_FILE_PATH")
 	private String cacheFilePath = "";
 	
-	@Column(name = "IS_DELETE")
+	@DataColumn(name = "IS_DELETE")
 	private String isDelete = "";
 
 	public String getBlobId() {

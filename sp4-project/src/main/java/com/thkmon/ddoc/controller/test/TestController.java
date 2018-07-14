@@ -1,4 +1,4 @@
-package com.thkmon.controller.test;
+package com.thkmon.ddoc.controller.test;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

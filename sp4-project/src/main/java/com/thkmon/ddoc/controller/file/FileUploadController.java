@@ -1,4 +1,4 @@
-package com.thkmon.controller.file;
+package com.thkmon.ddoc.controller.file;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +30,13 @@ public class FileUploadController {
 		MultipartHttpServletRequest multiReq = null;
 		
 		try {
-			multiReq = (MultipartHttpServletRequest) req;
+			
+			try {
+				multiReq = (MultipartHttpServletRequest) req;
+			} catch (Exception e) {
+				// 잘못된 접근
+				throw new Exception("잘못된 접근입니다.");
+			}
 			
 			Iterator<String> iter = multiReq.getFileNames();
 			if (iter == null) {
