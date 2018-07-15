@@ -12,6 +12,6 @@ import org.hibernate.annotations.Table;
 
 @Target({TYPE})
 @Retention(RUNTIME)
-public @interface DataTable {
+public @interface BBTable {
 	String name() default "";
 }

@@ -1,5 +1,5 @@
 package com.thkmon.database.prototype;
 
-public interface Data {
+public interface BBEntity {
 
 }

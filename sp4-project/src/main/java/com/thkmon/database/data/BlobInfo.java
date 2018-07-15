@@ -2,40 +2,40 @@ package com.thkmon.database.data;
 
 import java.sql.Blob;
 
-import com.thkmon.database.annotation.DataColumn;
-import com.thkmon.database.annotation.DataPrimaryKey;
-import com.thkmon.database.annotation.DataTable;
-import com.thkmon.database.prototype.Data;
+import com.thkmon.database.annotation.BBColumn;
+import com.thkmon.database.annotation.BBPrimaryKey;
+import com.thkmon.database.annotation.BBTable;
+import com.thkmon.database.prototype.BBEntity;
 
-@DataTable(name = "DDOC_BLOB_INFO")
-public class DdocBlobInfo implements Data {
+@BBTable(name = "DDOC_BLOB_INFO")
+public class BlobInfo implements BBEntity {
 	
-	@DataPrimaryKey(name = "BLOB_ID")
-	@DataColumn(name = "BLOB_ID")
+	@BBPrimaryKey(name = "BLOB_ID")
+	@BBColumn(name = "BLOB_ID")
 	private String blobId = "";
 	
-	@DataColumn(name = "FILE_BLOB")
+	@BBColumn(name = "FILE_BLOB")
 	private Blob fileBlob = null;
 	
-	@DataColumn(name = "FILE_SIZE")
+	@BBColumn(name = "FILE_SIZE")
 	private String fileSize = "";
 	
-	@DataColumn(name = "REG_TIME")
+	@BBColumn(name = "REG_TIME")
 	private String regTime = "";
 	
-	@DataColumn(name = "ORIGIN_FILE_NAME")
+	@BBColumn(name = "ORIGIN_FILE_NAME")
 	private String originFileName = "";
 	
-	@DataColumn(name = "ORIGIN_FILE_PATH")
+	@BBColumn(name = "ORIGIN_FILE_PATH")
 	private String originFilePath = "";
 	
-	@DataColumn(name = "CACHE_FILE_NAME")
+	@BBColumn(name = "CACHE_FILE_NAME")
 	private String cacheFileName = "";
 	
-	@DataColumn(name = "CACHE_FILE_PATH")
+	@BBColumn(name = "CACHE_FILE_PATH")
 	private String cacheFilePath = "";
 	
-	@DataColumn(name = "IS_DELETE")
+	@BBColumn(name = "IS_DELETE")
 	private String isDelete = "";
 
 	public String getBlobId() {

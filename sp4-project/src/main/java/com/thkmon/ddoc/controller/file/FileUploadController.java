@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.thkmon.database.data.DdocBlobInfo;
-import com.thkmon.database.mapper.JPAMapper;
+import com.thkmon.database.data.BlobInfo;
+import com.thkmon.database.mapper.BBMapperUtil;
 import com.thkmon.util.date.DateUtil;
 import com.thkmon.util.string.StringUtil;
 
@@ -139,7 +139,7 @@ public class FileUploadController {
 			throw new Exception("FileUploadController fileUpload : blob is null");
 		}
 		
-		DdocBlobInfo ddocBlobInfo = new DdocBlobInfo();
+		BlobInfo ddocBlobInfo = new BlobInfo();
 		ddocBlobInfo.setBlobId(blobId);
 		ddocBlobInfo.setFileBlob(blob);
 		ddocBlobInfo.setFileSize(String.valueOf(fileSize));
@@ -150,7 +150,9 @@ public class FileUploadController {
 		ddocBlobInfo.setCacheFilePath(cacheFilePath);
 		ddocBlobInfo.setIsDelete(isDelete);
 		
-		JPAMapper.getInstance().insert(DdocBlobInfo.class, ddocBlobInfo);
+		// JPAMapper.getInstance().insert(DdocBlobInfo.class, ddocBlobInfo);
+		
+		BBMapperUtil.getInstance().insert(ddocBlobInfo);
 		
 	}
 	
