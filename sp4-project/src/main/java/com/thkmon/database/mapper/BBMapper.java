@@ -1,8 +1,6 @@
 package com.thkmon.database.mapper;
 
 import java.lang.reflect.Field;
-import java.sql.Blob;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,7 +15,30 @@ public class BBMapper {
 
 	
 	private Connection privateConn = null;
+	private String sql = null;
+	private BBColumnValueList columnValueList = null;
 
+	
+	public String getSqlText() {
+		if (sql == null || sql.length() == 0) {
+			return "";
+		}
+		
+		if (columnValueList == null || columnValueList.size() == 0) {
+			return sql.trim();
+		}
+		
+		String result = sql;
+		
+		int columnValueCount = columnValueList.size();
+		for (int i=0; i<columnValueCount; i++) {
+			Object columnValue = columnValueList.get(i);
+			result = BBMapperUtil.replaceOne(result, "?", "'" + BBMapperUtil.convertToString(columnValue) + "'");
+		}
+		
+		return result.trim();
+	}
+	
 	
 	private void setConnection() {
 
@@ -131,7 +152,7 @@ public class BBMapper {
 			throw new Exception("DataMapper select : primaryKeyValue is null or empty");
 		}
 		
-		sql = " SELECT * FROM " + tableName + " WHERE " + primaryKeyName + " = ? ";
+		sql = "SELECT * FROM " + tableName + " WHERE " + primaryKeyName + " = ?";
 		BBColumnValueList bindVector = new BBColumnValueList();
 		bindVector.add(primaryKeyValue);
 				
@@ -153,17 +174,17 @@ public class BBMapper {
 	}
 	
 	
-	public BBEntityList select(BBEntity bbEntity, String sql, BBColumnValueList bindList) throws Exception {
-		return select(bbEntity, sql, bindList, false);
+	public BBEntityList select(BBEntity bbEntity, String sql, BBColumnValueList columnValueList) throws Exception {
+		return select(bbEntity, sql, columnValueList, false);
 	}
 	
 	
-	private BBEntityList select(BBEntity bbEntity, String sql, BBColumnValueList bindList, boolean bTransaction) throws Exception {
-		return selectList(bbEntity, sql, bindList, false);
+	private BBEntityList select(BBEntity bbEntity, String sql, BBColumnValueList columnValueList, boolean bTransaction) throws Exception {
+		return selectList(bbEntity, sql, columnValueList, false);
 	}
 	
 	
-	private BBEntityList selectList(BBEntity inputEntity, String sql, BBColumnValueList bindList, boolean bTransaction) throws Exception {
+	private BBEntityList selectList(BBEntity inputEntity, String sql, BBColumnValueList columnValueList, boolean bTransaction) throws Exception {
 		BBEntityList entityList = null;
 		
 		PreparedStatement pstmt = null;
@@ -175,7 +196,11 @@ public class BBMapper {
 			}
 			
 			pstmt = privateConn.prepareStatement(sql);
-			BBMapperUtil.bind(pstmt, bindList);
+			BBMapperUtil.bind(pstmt, columnValueList);
+			
+			// save sql and columnValueList
+			this.sql = sql;
+			this.columnValueList = columnValueList;
 			
 			resultSet = pstmt.executeQuery();
 			
@@ -247,25 +272,29 @@ public class BBMapper {
 			int columnNameCount = columnNameList.size();
 			
 			StringBuffer sqlBuff = new StringBuffer();
-			sqlBuff.append(" INSERT INTO ");
+			sqlBuff.append("INSERT INTO ");
 			sqlBuff.append(tableName);
-			sqlBuff.append(" ( ");
-			sqlBuff.append(BBMapperUtil.join(columnNameList, ","));
-			sqlBuff.append(" ) ");
+			sqlBuff.append(" (");
+			sqlBuff.append(BBMapperUtil.join(columnNameList, ", "));
+			sqlBuff.append(") ");
 			sqlBuff.append(" values ");
-			sqlBuff.append(" ( ");
-			sqlBuff.append(BBMapperUtil.join("?", ",", columnNameCount));
-			sqlBuff.append(" ) ");
+			sqlBuff.append(" (");
+			sqlBuff.append(BBMapperUtil.join("?", ", ", columnNameCount));
+			sqlBuff.append(")");
 			
 			if (!bTransaction || privateConn == null) {
 				setConnection();
 			}
 			
 			String sql = sqlBuff.toString();
-			pstmt = privateConn.prepareStatement(sql);
-			
 			BBColumnValueList columnValueList = columnNameList.convertToColumnValueList(bbEntity);
+			
+			pstmt = privateConn.prepareStatement(sql);
 			BBMapperUtil.bind(pstmt, columnValueList);
+			
+			// save sql and columnValueList
+			this.sql = sql;
+			this.columnValueList = columnValueList;
 			
 			bResult = pstmt.executeUpdate();
 			if (!bTransaction) {
@@ -316,7 +345,7 @@ public class BBMapper {
 			String primaryKeyName = BBMapperUtil.getPrimaryKeyName(bbEntity);
 			
 			StringBuffer sqlBuff = new StringBuffer();
-			sqlBuff.append(" UPDATE ");
+			sqlBuff.append("UPDATE ");
 			sqlBuff.append(tableName);
 			sqlBuff.append(" SET ");
 			
@@ -334,21 +363,24 @@ public class BBMapper {
 			
 			sqlBuff.append(" WHERE ");
 			sqlBuff.append(primaryKeyName);
-			sqlBuff.append(" = ? ");
+			sqlBuff.append(" = ?");
 			
 			if (!bTransaction || privateConn == null) {
 				setConnection();
 			}
 			
 			String sql = sqlBuff.toString();
-			pstmt = privateConn.prepareStatement(sql);
 			
 			BBColumnValueList columnValueList = columnNameList.convertToColumnValueList(bbEntity);
-			
 			Object primaryKeyValue = BBMapperUtil.getPrimaryKeyValue(bbEntity);
 			columnValueList.add(primaryKeyValue);
 			
+			pstmt = privateConn.prepareStatement(sql);
 			BBMapperUtil.bind(pstmt, columnValueList);
+			
+			// save sql and columnValueList
+			this.sql = sql;
+			this.columnValueList = columnValueList;
 			
 			bResult = pstmt.executeUpdate();
 			if (!bTransaction) {
@@ -399,24 +431,28 @@ public class BBMapper {
 			String primaryKeyName = BBMapperUtil.getPrimaryKeyName(bbEntity);
 			
 			StringBuffer sqlBuff = new StringBuffer();
-			sqlBuff.append(" DELETE FROM ");
+			sqlBuff.append("DELETE FROM ");
 			sqlBuff.append(tableName);
 			sqlBuff.append(" WHERE ");
 			sqlBuff.append(primaryKeyName);
-			sqlBuff.append(" = ? ");
+			sqlBuff.append(" = ?");
 			
 			if (!bTransaction || privateConn == null) {
 				setConnection();
 			}
 			
 			String sql = sqlBuff.toString();
-			pstmt = privateConn.prepareStatement(sql);
 			
 			Object primaryKeyValue = BBMapperUtil.getPrimaryKeyValue(bbEntity);
 			BBColumnValueList columnValueList = new BBColumnValueList();
 			columnValueList.add(primaryKeyValue);
 			
+			pstmt = privateConn.prepareStatement(sql);
 			BBMapperUtil.bind(pstmt, columnValueList);
+			
+			// save sql and columnValueList
+			this.sql = sql;
+			this.columnValueList = columnValueList;
 			
 			bResult = pstmt.executeUpdate();
 			if (!bTransaction) {

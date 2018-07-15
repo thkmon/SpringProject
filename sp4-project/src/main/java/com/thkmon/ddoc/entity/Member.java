@@ -16,7 +16,7 @@ public class Member implements BBEntity {
 	private String userName = "";
 	
 	@BBColumn(name = "AGE")
-	private Integer age = 0;
+	private int age = 0;
 	
 	public String getId() {
 		return id;
@@ -34,11 +34,11 @@ public class Member implements BBEntity {
 		this.userName = userName;
 	}
 
-	public Integer getAge() {
+	public int getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(int age) {
 		this.age = age;
 	}
 }

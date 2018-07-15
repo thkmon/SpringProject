@@ -65,4 +65,26 @@ public class StringUtil {
 		
 		return resultBuff.toString();
 	}
+	
+	
+	public static String replaceOne(String originStr, String preStr, String postStr) {
+		if (originStr == null || originStr.length() == 0) {
+			return "";
+		}
+		
+		if (preStr == null || preStr.length() == 0) {
+			return originStr;
+		}
+		
+		if (postStr == null) {
+			postStr = "";
+		}
+		
+		int index = originStr.indexOf(preStr);
+		if (index > -1) {
+			return originStr.substring(0, index) + postStr + originStr.substring(index + preStr.length());
+		}
+		
+		return originStr;
+	}
 }

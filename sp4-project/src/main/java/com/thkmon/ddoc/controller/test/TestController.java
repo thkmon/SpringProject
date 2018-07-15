@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.thkmon.database.mapper.BBMapper;
 import com.thkmon.database.mapper.BBMapperUtil;
 import com.thkmon.database.prototype.BBEntity;
 import com.thkmon.database.prototype.BBEntityList;
@@ -22,7 +23,9 @@ public class TestController {
 			member.setAge(100);
 			member.setUserName("wewewe");
 			
-			BBMapperUtil.getInstance().insert(member);
+			BBMapper mapper = BBMapperUtil.getInstance();
+			mapper.insert(member);
+			System.out.println(mapper.getSqlText()); 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,7 +38,9 @@ public class TestController {
 			member.setAge(10000);
 			member.setUserName("wewewe123");
 			
-			BBMapperUtil.getInstance().update(member);
+			BBMapper mapper = BBMapperUtil.getInstance();
+			mapper.update(member);
+			System.out.println(mapper.getSqlText()); 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -46,7 +51,9 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBEntity entity = BBMapperUtil.getInstance().selectSingleRow(member);
+			BBMapper mapper = BBMapperUtil.getInstance();
+			BBEntity entity = mapper.selectSingleRow(member);
+			System.out.println(mapper.getSqlText()); 
 			System.out.println(BBMapperUtil.convertToString(entity));
 			
 		} catch (Exception e) {
@@ -58,7 +65,9 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			int bResult = BBMapperUtil.getInstance().delete(member);
+			BBMapper mapper = BBMapperUtil.getInstance();
+			int bResult = mapper.delete(member);
+			System.out.println(mapper.getSqlText()); 
 			System.out.println(bResult);
 			
 		} catch (Exception e) {
@@ -70,7 +79,9 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBEntity entity = BBMapperUtil.getInstance().selectSingleRow(member);
+			BBMapper mapper = BBMapperUtil.getInstance();
+			BBEntity entity = mapper.selectSingleRow(member);
+			System.out.println(mapper.getSqlText()); 
 			System.out.println(BBMapperUtil.convertToString(entity));
 			
 		} catch (Exception e) {
@@ -81,7 +92,9 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBEntityList entityList = BBMapperUtil.getInstance().select(member, " SELECT * FROM test_member WHERE age = '100' ");
+			BBMapper mapper = BBMapperUtil.getInstance();
+			BBEntityList entityList = mapper.select(member, " SELECT * FROM test_member WHERE age = '100' ");
+			System.out.println(mapper.getSqlText()); 
 			System.out.println(BBMapperUtil.convertToString(entityList));
 			
 		} catch (Exception e) {

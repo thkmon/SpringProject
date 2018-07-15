@@ -161,18 +161,6 @@ public class BBMapperUtil {
 			field.setAccessible(false);
 			return result;
 		
-		} else if (fieldClassName.indexOf("java.sql.Blob") > -1) {
-			field.setAccessible(true);
-			Blob result = (Blob) field.get(bbEntity);
-			field.setAccessible(false);
-			return result;
-			
-		} else if (fieldClassName.indexOf("java.sql.Clob") > -1) {
-			field.setAccessible(true);
-			Clob result = (Clob) field.get(bbEntity);
-			field.setAccessible(false);
-			return result;
-			
 		} else if (fieldClassName.indexOf("java.lang.Integer") > -1) {
 			field.setAccessible(true);
 			Integer result = (Integer) field.get(bbEntity);
@@ -182,6 +170,18 @@ public class BBMapperUtil {
 		} else if (fieldClassName.indexOf("java.lang.Long") > -1) {
 			field.setAccessible(true);
 			Long result = (Long) field.get(bbEntity);
+			field.setAccessible(false);
+			return result;
+			
+		} else if (fieldClassName.indexOf("java.sql.Blob") > -1) {
+			field.setAccessible(true);
+			Blob result = (Blob) field.get(bbEntity);
+			field.setAccessible(false);
+			return result;
+			
+		} else if (fieldClassName.indexOf("java.sql.Clob") > -1) {
+			field.setAccessible(true);
+			Clob result = (Clob) field.get(bbEntity);
 			field.setAccessible(false);
 			return result;
 			
@@ -213,18 +213,6 @@ public class BBMapperUtil {
 			field.set(bbEntity, value);
 			field.setAccessible(false);
 			
-		} else if (fieldClassName.indexOf("java.sql.Blob") > -1) {
-			Blob value = resultSet.getBlob(columnName);
-			field.setAccessible(true);
-			field.set(bbEntity, value);
-			field.setAccessible(false);
-			
-		} else if (fieldClassName.indexOf("java.sql.Clob") > -1) {
-			Clob value = resultSet.getClob(columnName);
-			field.setAccessible(true);
-			field.set(bbEntity, value);
-			field.setAccessible(false);
-			
 		} else if (fieldClassName.indexOf("java.lang.Integer") > -1) {
 			Integer value = resultSet.getInt(columnName);
 			field.setAccessible(true);
@@ -233,6 +221,18 @@ public class BBMapperUtil {
 			
 		} else if (fieldClassName.indexOf("java.lang.Long") > -1) {
 			Long value = resultSet.getLong(columnName);
+			field.setAccessible(true);
+			field.set(bbEntity, value);
+			field.setAccessible(false);
+			
+		} else if (fieldClassName.indexOf("java.sql.Blob") > -1) {
+			Blob value = resultSet.getBlob(columnName);
+			field.setAccessible(true);
+			field.set(bbEntity, value);
+			field.setAccessible(false);
+			
+		} else if (fieldClassName.indexOf("java.sql.Clob") > -1) {
+			Clob value = resultSet.getClob(columnName);
 			field.setAccessible(true);
 			field.set(bbEntity, value);
 			field.setAccessible(false);
@@ -398,6 +398,12 @@ public class BBMapperUtil {
 				
 			} else if (bindObj instanceof String) {
 				pstmt.setString(i+1, String.valueOf(bindObj));
+			
+			} else if (bindObj instanceof Integer) {
+				pstmt.setLong(i+1, Integer.parseInt(String.valueOf(bindObj)));
+				
+			} else if (bindObj instanceof Long) {
+				pstmt.setLong(i+1, Long.parseLong(String.valueOf(bindObj)));
 				
 			} else if (bindObj instanceof Blob) {
 				pstmt.setBlob(i+1, (Blob)bindObj);
@@ -480,26 +486,58 @@ public class BBMapperUtil {
 			
 			buff.append(columnName);
 			buff.append("==[");
-			
-			if (columnValue instanceof String) {
-				buff.append(columnValue);
-				
-			} else if (columnValue instanceof Integer) {
-				buff.append(String.valueOf(columnValue));
-				
-			} else {
-				if (columnValue == null) {
-					buff.append("null");
-				} else {
-					buff.append(columnValue.getClass().getName());
-				}
-			}
-			
+			buff.append(convertToString(columnValue));
 			buff.append("]");
 		}
 		
 		String tableName = getTableName(bbEntity);
 		
 		return "BBEntity[" + tableName + "] : " + buff.toString();
+	}
+	
+	
+	public static String convertToString(Object columnValue) {
+		if (columnValue == null) {
+			return "null";
+			
+		} else if (columnValue instanceof String) {
+			return String.valueOf(columnValue);
+			
+		} else if (columnValue instanceof Integer) {
+			return String.valueOf(columnValue);
+			
+		} else if (columnValue instanceof Long) {
+			return String.valueOf(columnValue);
+			
+		} else if (columnValue instanceof Blob) {
+			return "BLOB";
+			
+		} else if (columnValue instanceof Clob) {
+			return "CLOB";
+		}
+		
+		return columnValue.toString();
+	}
+	
+	
+	public static String replaceOne(String originStr, String preStr, String postStr) {
+		if (originStr == null || originStr.length() == 0) {
+			return "";
+		}
+		
+		if (preStr == null || preStr.length() == 0) {
+			return originStr;
+		}
+		
+		if (postStr == null) {
+			postStr = "";
+		}
+		
+		int index = originStr.indexOf(preStr);
+		if (index > -1) {
+			return originStr.substring(0, index) + postStr + originStr.substring(index + preStr.length());
+		}
+		
+		return originStr;
 	}
 }

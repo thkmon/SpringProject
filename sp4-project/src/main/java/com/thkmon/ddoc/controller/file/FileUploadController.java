@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.thkmon.database.mapper.BBMapper;
 import com.thkmon.database.mapper.BBMapperUtil;
 import com.thkmon.ddoc.entity.BlobInfo;
 import com.thkmon.util.date.DateUtil;
@@ -152,8 +153,9 @@ public class FileUploadController {
 		
 		// JPAMapper.getInstance().insert(DdocBlobInfo.class, ddocBlobInfo);
 		
-		BBMapperUtil.getInstance().insert(ddocBlobInfo);
-		
+		BBMapper mapper = BBMapperUtil.getInstance();
+		mapper.insert(ddocBlobInfo);
+		System.out.println(mapper.getSqlText());
 	}
 	
 	
