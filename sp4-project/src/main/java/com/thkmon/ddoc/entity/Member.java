@@ -1,4 +1,4 @@
-package com.thkmon.database.data;
+package com.thkmon.ddoc.entity;
 
 import com.thkmon.database.annotation.BBColumn;
 import com.thkmon.database.annotation.BBPrimaryKey;
@@ -33,11 +33,11 @@ public class Member implements BBEntity {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
+
 	public Integer getAge() {
 		return age;
 	}
-	
+
 	public void setAge(Integer age) {
 		this.age = age;
 	}

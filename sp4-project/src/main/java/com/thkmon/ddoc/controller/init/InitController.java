@@ -3,9 +3,9 @@ package com.thkmon.ddoc.controller.init;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.thkmon.database.data.BlobInfo;
 import com.thkmon.database.mapper.BBMapper;
 import com.thkmon.database.mapper.BBMapperUtil;
+import com.thkmon.ddoc.entity.BlobInfo;
 
 @Controller
 public class InitController {

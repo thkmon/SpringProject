@@ -1,4 +1,4 @@
-package com.thkmon.database.data;
+package com.thkmon.ddoc.entity;
 
 import java.sql.Blob;
 

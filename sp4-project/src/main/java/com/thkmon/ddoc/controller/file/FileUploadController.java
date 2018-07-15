@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.thkmon.database.data.BlobInfo;
 import com.thkmon.database.mapper.BBMapperUtil;
+import com.thkmon.ddoc.entity.BlobInfo;
 import com.thkmon.util.date.DateUtil;
 import com.thkmon.util.string.StringUtil;
 

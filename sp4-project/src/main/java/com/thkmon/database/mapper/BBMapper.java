@@ -1,18 +1,17 @@
 package com.thkmon.database.mapper;
 
 import java.lang.reflect.Field;
-import java.net.InetSocketAddress;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Vector;
 
+import com.thkmon.database.prototype.BBColumnNameList;
+import com.thkmon.database.prototype.BBColumnValueList;
 import com.thkmon.database.prototype.BBEntity;
-import com.thkmon.util.string.StringUtil;
+import com.thkmon.database.prototype.BBEntityList;
 
 public class BBMapper {
 
@@ -114,7 +113,7 @@ public class BBMapper {
 	}
 	
 	
-	public BBEntity select(BBEntity bbEntity) throws Exception {
+	public BBEntity selectSingleRow(BBEntity bbEntity) throws Exception {
 		String sql = "";
 		
 		String tableName = BBMapperUtil.getTableName(bbEntity);
@@ -133,24 +132,40 @@ public class BBMapper {
 		}
 		
 		sql = " SELECT * FROM " + tableName + " WHERE " + primaryKeyName + " = ? ";
-		Vector bindVector = new Vector();
+		BBColumnValueList bindVector = new BBColumnValueList();
 		bindVector.add(primaryKeyValue);
 				
-		return select(bbEntity, sql, bindVector, false);
+		BBEntityList list = select(bbEntity, sql, bindVector, false);
+		if (list == null || list.size() == 0) {
+			return null;
+		}
+		
+		if (list.size() > 1) {
+			throw new Exception("BBMapper selectSingleRow : count == [" + list.size() + "]");
+		}
+		
+		return list.get(0);
 	}
 	
-	
-	public BBEntity select(BBEntity bbEntity, String sql) throws Exception {
+
+	public BBEntityList select(BBEntity bbEntity, String sql) throws Exception {
 		return select(bbEntity, sql, null, false);
 	}
 	
 	
-	public BBEntity select(BBEntity bbEntity, String sql, Vector bindList) throws Exception {
+	public BBEntityList select(BBEntity bbEntity, String sql, BBColumnValueList bindList) throws Exception {
 		return select(bbEntity, sql, bindList, false);
 	}
 	
 	
-	public BBEntity select(BBEntity bbEntity, String sql, Vector bindList, boolean bTransaction) throws Exception {
+	private BBEntityList select(BBEntity bbEntity, String sql, BBColumnValueList bindList, boolean bTransaction) throws Exception {
+		return selectList(bbEntity, sql, bindList, false);
+	}
+	
+	
+	private BBEntityList selectList(BBEntity inputEntity, String sql, BBColumnValueList bindList, boolean bTransaction) throws Exception {
+		BBEntityList entityList = null;
+		
 		PreparedStatement pstmt = null;
 		ResultSet resultSet = null;
 		
@@ -160,36 +175,16 @@ public class BBMapper {
 			}
 			
 			pstmt = privateConn.prepareStatement(sql);
-			if (bindList != null && bindList.size() > 0) {
-				Object bindObj = null;
-				int bindCount = bindList.size();
-				for (int i=0; i<bindCount; i++) {
-					bindObj = bindList.get(i);
-					
-					if (bindObj == null) {
-						pstmt.setNull(i+1, 0);
-						
-					} else if (bindObj instanceof String) {
-						pstmt.setString(i+1, String.valueOf(bindObj));
-						
-					} else if (bindObj instanceof Blob) {
-						pstmt.setBlob(i+1, (Blob)bindObj);
-						
-					} else if (bindObj instanceof Clob) {
-						pstmt.setClob(i+1, (Clob)bindObj);
-						
-					} else {
-						pstmt.setInt(i+1, Integer.parseInt(String.valueOf(bindObj)));
-					}
-				}
-			}
+			BBMapperUtil.bind(pstmt, bindList);
 			
 			resultSet = pstmt.executeQuery();
 			
 			if (resultSet != null) {
 				while (resultSet.next()) {
 					
-					Field[] fields = bbEntity.getClass().getDeclaredFields();
+					BBEntity oneEntity = (BBEntity) (Class.forName(inputEntity.getClass().getName()).newInstance());
+					
+					Field[] fields = oneEntity.getClass().getDeclaredFields();
 					int fieldCount = fields.length;
 					for (int i=0; i<fieldCount; i++) {
 						Field field = fields[i];
@@ -197,46 +192,15 @@ public class BBMapper {
 							continue;
 						}
 						
-						String columnName = BBMapperUtil.getColumnName(field);
-						if (columnName == null || columnName.length() == 0) {
-							continue;
-						}
-						
-						Class fieldClass = BBMapperUtil.getColumnType(field);
-						if (fieldClass == null) {
-							continue;
-						}
-						
-						String fieldClassName = fieldClass.getName();
-						
-						if (fieldClassName.indexOf("java.lang.String") > -1) {
-							String value = resultSet.getString(columnName);
-							field.setAccessible(true);
-							field.set(bbEntity, value);
-							field.setAccessible(false);
-							
-						} else if (fieldClassName.indexOf("java.sql.Blob") > -1) {
-							Blob value = resultSet.getBlob(columnName);
-							field.setAccessible(true);
-							field.set(bbEntity, value);
-							field.setAccessible(false);
-							
-						} else if (fieldClassName.indexOf("java.sql.Clob") > -1) {
-							Clob value = resultSet.getClob(columnName);
-							field.setAccessible(true);
-							field.set(bbEntity, value);
-							field.setAccessible(false);
-							
-						} else {
-							int value = resultSet.getInt(columnName);
-							field.setAccessible(true);
-							field.setInt(bbEntity, value);
-							field.setAccessible(false);
-						}
+						BBMapperUtil.setFieldValue(oneEntity, field, resultSet);
 					}
+					
+					if (entityList == null) {
+						entityList = new BBEntityList();
+					}
+					
+					entityList.add(oneEntity);
 				}
-				
-				return bbEntity;
 			}
 			
 		} catch (Exception e) {
@@ -252,7 +216,7 @@ public class BBMapper {
 			}			
 		}
 		
-		return null;
+		return entityList;
 	}
 	
 	
@@ -275,7 +239,7 @@ public class BBMapper {
 				throw new Exception("DataMapper insert : tableName is null or empty");
 			}
 			
-			ArrayList<String> columnNameList = BBMapperUtil.getColumnNameList(bbEntity);
+			BBColumnNameList columnNameList = BBMapperUtil.getColumnNameList(bbEntity);
 			if (columnNameList == null || columnNameList.size() == 0) {
 				throw new Exception("DataMapper insert : columnNameList is null or empty");
 			}
@@ -286,11 +250,11 @@ public class BBMapper {
 			sqlBuff.append(" INSERT INTO ");
 			sqlBuff.append(tableName);
 			sqlBuff.append(" ( ");
-			sqlBuff.append(StringUtil.join(columnNameList, ","));
+			sqlBuff.append(BBMapperUtil.join(columnNameList, ","));
 			sqlBuff.append(" ) ");
 			sqlBuff.append(" values ");
 			sqlBuff.append(" ( ");
-			sqlBuff.append(StringUtil.join("?", ",", columnNameCount));
+			sqlBuff.append(BBMapperUtil.join("?", ",", columnNameCount));
 			sqlBuff.append(" ) ");
 			
 			if (!bTransaction || privateConn == null) {
@@ -299,28 +263,9 @@ public class BBMapper {
 			
 			String sql = sqlBuff.toString();
 			pstmt = privateConn.prepareStatement(sql);
-			Object bindObj = null;
-			for (int i=0; i<columnNameCount; i++) {
-				String columnName = columnNameList.get(i);
-				
-				bindObj = BBMapperUtil.getColumnValue(bbEntity, columnName);
-				
-				if (bindObj == null) {
-					pstmt.setNull(i+1, 0);
-					
-				} else if (bindObj instanceof String) {
-					pstmt.setString(i+1, String.valueOf(bindObj));
-					
-				} else if (bindObj instanceof Blob) {
-					pstmt.setBlob(i+1, (Blob)bindObj);
-					
-				} else if (bindObj instanceof Clob) {
-					pstmt.setClob(i+1, (Clob)bindObj);
-					
-				} else {
-					pstmt.setInt(i+1, Integer.parseInt(String.valueOf(bindObj)));
-				}
-			}
+			
+			BBColumnValueList columnValueList = columnNameList.convertToColumnValueList(bbEntity);
+			BBMapperUtil.bind(pstmt, columnValueList);
 			
 			bResult = pstmt.executeUpdate();
 			if (!bTransaction) {
@@ -363,7 +308,7 @@ public class BBMapper {
 				throw new Exception("DataMapper update : tableName is null or empty");
 			}
 			
-			ArrayList<String> columnNameList = BBMapperUtil.getColumnNameList(bbEntity);
+			BBColumnNameList columnNameList = BBMapperUtil.getColumnNameList(bbEntity);
 			if (columnNameList == null || columnNameList.size() == 0) {
 				throw new Exception("DataMapper update : columnNameList is null or empty");
 			}
@@ -398,38 +343,12 @@ public class BBMapper {
 			String sql = sqlBuff.toString();
 			pstmt = privateConn.prepareStatement(sql);
 			
-			int bindIndex = 1;
-			Object bindObj = null;
-			for (int i=0; i<columnNameCount; i++) {
-				String columnName = columnNameList.get(i);
-				
-				bindObj = BBMapperUtil.getColumnValue(bbEntity, columnName);
-				
-				if (bindObj == null) {
-					pstmt.setNull(bindIndex++, 0);
-					
-				} else if (bindObj instanceof String) {
-					pstmt.setString(bindIndex++, String.valueOf(bindObj));
-					
-				} else if (bindObj instanceof Blob) {
-					pstmt.setBlob(bindIndex++, (Blob)bindObj);
-					
-				} else if (bindObj instanceof Clob) {
-					pstmt.setClob(bindIndex++, (Clob)bindObj);
-					
-				} else {
-					pstmt.setInt(bindIndex++, Integer.parseInt(String.valueOf(bindObj)));
-				}
-			}
+			BBColumnValueList columnValueList = columnNameList.convertToColumnValueList(bbEntity);
 			
 			Object primaryKeyValue = BBMapperUtil.getPrimaryKeyValue(bbEntity);
+			columnValueList.add(primaryKeyValue);
 			
-			if (primaryKeyValue instanceof String) {
-				pstmt.setString(bindIndex++, String.valueOf(primaryKeyValue));
-				
-			} else {
-				pstmt.setInt(bindIndex++, Integer.parseInt(String.valueOf(primaryKeyValue)));
-			}
+			BBMapperUtil.bind(pstmt, columnValueList);
 			
 			bResult = pstmt.executeUpdate();
 			if (!bTransaction) {
@@ -472,7 +391,7 @@ public class BBMapper {
 				throw new Exception("DataMapper delete : tableName is null or empty");
 			}
 			
-			ArrayList<String> columnNameList = BBMapperUtil.getColumnNameList(bbEntity);
+			BBColumnNameList columnNameList = BBMapperUtil.getColumnNameList(bbEntity);
 			if (columnNameList == null || columnNameList.size() == 0) {
 				throw new Exception("DataMapper delete : columnNameList is null or empty");
 			}
@@ -493,15 +412,11 @@ public class BBMapper {
 			String sql = sqlBuff.toString();
 			pstmt = privateConn.prepareStatement(sql);
 			
-			int bindIndex = 1;
 			Object primaryKeyValue = BBMapperUtil.getPrimaryKeyValue(bbEntity);
+			BBColumnValueList columnValueList = new BBColumnValueList();
+			columnValueList.add(primaryKeyValue);
 			
-			if (primaryKeyValue instanceof String) {
-				pstmt.setString(bindIndex++, String.valueOf(primaryKeyValue));
-				
-			} else {
-				pstmt.setInt(bindIndex++, Integer.parseInt(String.valueOf(primaryKeyValue)));
-			}
+			BBMapperUtil.bind(pstmt, columnValueList);
 			
 			bResult = pstmt.executeUpdate();
 			if (!bTransaction) {
