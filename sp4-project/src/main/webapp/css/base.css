@@ -1,0 +1,83 @@
+body {
+	margin: 1;
+}
+
+::selection {
+	background: #000000;
+	color: #FFFFFF;
+	text-shadow: none;
+}
+
+::-moz-selection {
+	background: #000000;
+	color: #FFFFFF;
+	text-shadow: none;
+}
+
+::-webkit-selection {
+	background: #000000;
+	color: #FFFFFF;
+	text-shadow: none;
+}
+
+@font-face {
+	/* thanks to Joungkyun. cf. https://github.com/Joungkyun/font-d2coding/releases */
+	font-family: D2Coding; 
+	src: url('/font/D2Coding.woff') format('woff');
+}
+
+.border1 {
+	border: 1px solid #000000;
+}
+
+.width100per {
+	width: 100%;
+}
+
+.logo_plate {
+	background-image: url('/image/logo/ddoc_small.gif');
+	background-repeat: no-repeat;
+	background-size: 70px;
+	
+	margin: 0 auto;
+	width: 100%;
+	max-width: 400px;
+	/* border: 1px solid #000000; */
+	
+	margin-top: 30px;
+	height: 30px;
+	margin-bottom: 10px;
+}
+
+.main_plate {
+	margin: 0 auto;
+	width: 100%;
+	max-width: 400px;
+	
+	border-top: 0px;
+	border-bottom: 1px solid #DDDDDD;
+	border-left: 0px;
+	border-right: 0px;
+	
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+
+.font_big {
+	font-family: D2Coding;
+	font-size: 19px;
+	line-height: 38px;
+}
+
+.font_middle {
+	font-family: D2Coding;
+	font-size: 16px;
+	line-height: 32px;
+}
+
+.font_small {
+	font-family: D2Coding;
+	font-size: 13px;
+	line-height: 26px;
+}
