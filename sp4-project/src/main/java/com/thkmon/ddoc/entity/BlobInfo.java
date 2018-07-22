@@ -37,7 +37,10 @@ public class BlobInfo implements BBEntity {
 	
 	@BBColumn(name = "IS_DELETE")
 	private String isDelete = "";
-
+	
+	@BBColumn(name = "IS_POST")
+	private String isPost = "";
+	
 	public String getBlobId() {
 		return blobId;
 	}
@@ -108,5 +111,13 @@ public class BlobInfo implements BBEntity {
 
 	public void setIsDelete(String isDelete) {
 		this.isDelete = isDelete;
+	}
+
+	public String getIsPost() {
+		return isPost;
+	}
+
+	public void setIsPost(String isPost) {
+		this.isPost = isPost;
 	}
 }

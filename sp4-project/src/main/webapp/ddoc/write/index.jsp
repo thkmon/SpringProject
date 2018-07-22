@@ -8,16 +8,14 @@
 	<link rel="stylesheet" type="text/css" href="/ddoc/write/bbjseditor.css">
 	<script type="text/javascript" src="/lib/jquery/jquery-2.x-git.min.js"></script>
 	<script type="text/javascript" src="/ddoc/write/bbjseditor.js"></script>
+	<script type="text/javascript" src="/upload/upload_util.js"></script>
 	<script type="text/javascript">
 		// @implement
-		bbjseditor.uploadFileToServer = function(_localPath) {
-			alert("Dd : " + _localPath);
-			
-			// 
-			var serverPath = _localPath;
-			return serverPath;
+		bbjseditor.setPicture = function() {
+			uploadUtil.doUpload();
+			bbjseditor.focus();
 		}
-	
+		
 		window.onload = function() {
 			bbjseditor.createEditor("editorDiv", "500px");
 		}

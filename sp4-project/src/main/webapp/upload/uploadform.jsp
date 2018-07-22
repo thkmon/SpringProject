@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript" src="/lib/jquery/jquery-2.x-git.min.js"></script>
 <script type="text/javascript">
 window.onload = function() {
 	if (window.parent != null) {
@@ -26,6 +27,7 @@ window.onload = function() {
 </head>
 <body>
 <form action="/file/upload" id="file_form" name="file_form" method="post" enctype="multipart/form-data">
+<!-- 	<label id="file_input_label" name="file_input_label" for="file_input">qweqwewq</label> -->
 	<input type="file" id="file_input" name="file_input"><br>
 </form>
 </body>

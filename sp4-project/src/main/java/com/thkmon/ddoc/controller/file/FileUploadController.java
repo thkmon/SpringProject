@@ -151,6 +151,7 @@ public class FileUploadController {
 		originFilePath = StringUtil.revisePath(originFilePath);
 		String cacheFilePath = StringUtil.revisePath(fileObj.getAbsolutePath());
 		String isDelete = "0";
+		String isPost = "0";
 		
 		LoggerUtil.getInstance().debug(" BLOB_ID           : " + blobId);
 		LoggerUtil.getInstance().debug(" FILE_BLOB         : " + "");
@@ -161,6 +162,7 @@ public class FileUploadController {
 		LoggerUtil.getInstance().debug(" CACHE_FILE_NAME   : " + cacheFileName);
 		LoggerUtil.getInstance().debug(" CACHE_FILE_PATH   : " + cacheFilePath);
 		LoggerUtil.getInstance().debug(" IS_DELETE         : " + isDelete);
+		LoggerUtil.getInstance().debug(" IS_POST           : " + isPost);
 		
 //		byte[] fileBlob = convertFileToBlob(resultFile);
 		
@@ -179,6 +181,7 @@ public class FileUploadController {
 		ddocBlobInfo.setCacheFileName(cacheFileName);
 		ddocBlobInfo.setCacheFilePath(cacheFilePath);
 		ddocBlobInfo.setIsDelete(isDelete);
+		ddocBlobInfo.setIsPost(isPost);
 		
 		// JPAMapper.getInstance().insert(DdocBlobInfo.class, ddocBlobInfo);
 		
