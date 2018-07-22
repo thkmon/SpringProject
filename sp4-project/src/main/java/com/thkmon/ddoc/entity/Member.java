@@ -1,9 +1,9 @@
 package com.thkmon.ddoc.entity;
 
-import com.thkmon.database.annotation.BBColumn;
-import com.thkmon.database.annotation.BBPrimaryKey;
-import com.thkmon.database.annotation.BBTable;
-import com.thkmon.database.prototype.BBEntity;
+import com.bb.mapper.annotation.BBColumn;
+import com.bb.mapper.annotation.BBPrimaryKey;
+import com.bb.mapper.annotation.BBTable;
+import com.bb.mapper.prototype.BBEntity;
 
 @BBTable(name = "TEST_MEMBER")
 public class Member implements BBEntity {

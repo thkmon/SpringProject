@@ -9,7 +9,27 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+	<repositories>
+		<repository>
+			<id>bb</id>
+			<name>bb</name>
+			<url>file://${basedir}/lib</url>
+			</repository>
+	</repositories>
+
+
 	<dependencies>
+		<dependency>
+			<groupId>bb</groupId>
+			<artifactId>BBLogger</artifactId>
+			<version>1.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>bb</groupId>
+			<artifactId>BBMapper</artifactId>
+			<version>1.0</version>
+		</dependency>
 	
 		<!-- 스프링 -->
 		<dependency>

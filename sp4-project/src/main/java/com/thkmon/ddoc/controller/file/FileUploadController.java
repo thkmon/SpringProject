@@ -1,32 +1,60 @@
 package com.thkmon.ddoc.controller.file;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.sql.Blob;
 import java.util.Iterator;
 
+import javax.persistence.metamodel.SetAttribute;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.thkmon.database.mapper.BBMapper;
-import com.thkmon.database.mapper.BBMapperUtil;
+import com.bb.mapper.BBMapper;
+import com.bb.mapper.util.BBMapperUtil;
 import com.thkmon.ddoc.entity.BlobInfo;
 import com.thkmon.util.date.DateUtil;
+import com.thkmon.util.logger.LoggerUtil;
 import com.thkmon.util.string.StringUtil;
 
 @Controller
 public class FileUploadController {
 	
+	
+	@RequestMapping("/upload/test")
+	public String testUpload(Model model, @RequestParam(value = "name", required = false) String name) {
+		// model.addAttribute("greeting", "안녕하세요, " + name);
+		return "upload/test";
+	}
+
+	
+	@RequestMapping("/upload/uploadform")
+	public String write(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		return "upload/uploadform";
+	}
+	
+	
+	@RequestMapping("/getfile")
+	public String getfile(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		return "getfile";
+	}
+	
+	
 	@RequestMapping("/file/upload")
 	public String fileUpload(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		String resultPage = "test/upload";
+		String failPage = "common/empty";
 		
 		MultipartHttpServletRequest multiReq = null;
 		
@@ -41,7 +69,7 @@ public class FileUploadController {
 			
 			Iterator<String> iter = multiReq.getFileNames();
 			if (iter == null) {
-				return resultPage;
+				return failPage;
 			}
 			
 			while (iter.hasNext()) {
@@ -55,18 +83,19 @@ public class FileUploadController {
 					continue;
 				}
 				
-				saveCacheFile(mFile);
+				BlobInfo ddocBlobInfo = saveCacheFile(mFile);
+				req.setAttribute("id", ddocBlobInfo.getBlobId());
 			}
 			
 		} catch (Exception e) {
 			throw e;
 		}
 		
-		return resultPage;
+		return "upload/uploaded";
 	}
 	
 	
-	public void saveCacheFile(MultipartFile mFile) throws Exception {
+	public BlobInfo saveCacheFile(MultipartFile mFile) throws Exception {
 		
 		String dateTimeMilSec = DateUtil.getTodayDateTimeMilSec();
 		String dateTime = dateTimeMilSec.substring(0, 14);
@@ -97,7 +126,7 @@ public class FileUploadController {
 			originFilePath = fileItem.getName();
 		
 		} catch (Exception e) {
-			System.out.println("FileUploadController fileUpload (getOriginFilePath) : " + e.getMessage());
+			LoggerUtil.getInstance().debug("FileUploadController fileUpload (getOriginFilePath) : " + e.getMessage());
 		}
 		
 		String basePath = "ddoc/cache/";
@@ -123,15 +152,15 @@ public class FileUploadController {
 		String cacheFilePath = StringUtil.revisePath(fileObj.getAbsolutePath());
 		String isDelete = "0";
 		
-		System.out.println(" BLOB_ID           : " + blobId);
-		System.out.println(" FILE_BLOB         : " + "");
-		System.out.println(" FILE_SIZE         : " + fileSize);
-		System.out.println(" REG_TIME          : " + regTime);
-		System.out.println(" ORIGIN_FILE_NAME  : " + originFileName);
-		System.out.println(" ORIGIN_FILE_PATH  : " + originFilePath);
-		System.out.println(" CACHE_FILE_NAME   : " + cacheFileName);
-		System.out.println(" CACHE_FILE_PATH   : " + cacheFilePath);
-		System.out.println(" IS_DELETE         : " + isDelete);
+		LoggerUtil.getInstance().debug(" BLOB_ID           : " + blobId);
+		LoggerUtil.getInstance().debug(" FILE_BLOB         : " + "");
+		LoggerUtil.getInstance().debug(" FILE_SIZE         : " + fileSize);
+		LoggerUtil.getInstance().debug(" REG_TIME          : " + regTime);
+		LoggerUtil.getInstance().debug(" ORIGIN_FILE_NAME  : " + originFileName);
+		LoggerUtil.getInstance().debug(" ORIGIN_FILE_PATH  : " + originFilePath);
+		LoggerUtil.getInstance().debug(" CACHE_FILE_NAME   : " + cacheFileName);
+		LoggerUtil.getInstance().debug(" CACHE_FILE_PATH   : " + cacheFilePath);
+		LoggerUtil.getInstance().debug(" IS_DELETE         : " + isDelete);
 		
 //		byte[] fileBlob = convertFileToBlob(resultFile);
 		
@@ -153,9 +182,11 @@ public class FileUploadController {
 		
 		// JPAMapper.getInstance().insert(DdocBlobInfo.class, ddocBlobInfo);
 		
-		BBMapper mapper = BBMapperUtil.getInstance();
+		BBMapper mapper = new BBMapper();
 		mapper.insert(ddocBlobInfo);
-		System.out.println(mapper.getSqlText());
+		LoggerUtil.getInstance().debug(mapper.getSqlText());
+		
+		return ddocBlobInfo;
 	}
 	
 	
@@ -179,6 +210,74 @@ public class FileUploadController {
 		}
 		
 		return blob;
+	}
+	
+	private String convertBlobToString(Blob blob) throws Exception {
+		if (blob == null) {
+			return "";
+		}
+		
+		String singleLine = null;
+		StringBuilder builder = new StringBuilder();
+		
+		InputStream inputStream = null;
+		InputStreamReader inputStreamReader = null;
+		BufferedReader bufferedReader = null;
+		
+		try {
+			inputStream = blob.getBinaryStream();
+			if (inputStream == null) {
+				return "";
+			}
+			
+			inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+			bufferedReader = new BufferedReader(inputStreamReader);
+		
+			while ((singleLine = bufferedReader.readLine()) != null) {
+				builder.append(singleLine);
+			}
+
+		} catch (Exception e) {
+			
+		} finally {
+			try {
+				if (bufferedReader != null) {
+					bufferedReader.close();
+				}
+				
+			} catch (Exception e) {
+				bufferedReader = null;
+				
+			} finally {
+				bufferedReader = null;
+			}
+			
+			try {
+				if (inputStreamReader != null) {
+					inputStreamReader.close();
+				}
+				
+			} catch (Exception e) {
+				inputStreamReader = null;
+				
+			} finally {
+				inputStreamReader = null;
+			}
+			
+			try {
+				if (inputStream != null) {
+					inputStream.close();
+				}
+				
+			} catch (Exception e) {
+				inputStream = null;
+				
+			} finally {
+				inputStream = null;
+			}
+		}
+		
+		return builder.toString();
 	}
 	
 	

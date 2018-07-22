@@ -26,6 +26,10 @@ body {
 	src: url('/font/D2Coding.woff') format('woff');
 }
 
+.border0 {
+	border: 0px;
+}
+
 .border1 {
 	border: 1px solid #000000;
 }
@@ -42,7 +46,6 @@ body {
 	margin: 0 auto;
 	width: 100%;
 	max-width: 400px;
-	/* border: 1px solid #000000; */
 	
 	margin-top: 30px;
 	height: 30px;
@@ -54,15 +57,25 @@ body {
 	width: 100%;
 	max-width: 400px;
 	
-	border-top: 0px;
-	border-bottom: 1px solid #DDDDDD;
-	border-left: 0px;
-	border-right: 0px;
-	
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
+.mg2 {
+	margin: 2px;
+}
+
+.mg4 {
+	margin: 4px;
+}
+
+.mg5 {
+	margin: 5px;
+}
+
+.mg10 {
+	margin: 10px;
+}
 
 .font_big {
 	font-family: D2Coding;
@@ -80,4 +93,53 @@ body {
 	font-family: D2Coding;
 	font-size: 13px;
 	line-height: 26px;
+}
+
+/* .basic_area { */
+/* 	border: 1px solid #DDDDDD; */
+/* } */
+
+.bd1 {
+	border: 1px solid #DDDDDD;
+}
+
+.bdt {
+	border-top: 1px solid #DDDDDD;
+}
+
+.bdb {
+	border-bottom: 1px solid #DDDDDD;
+}
+
+.bdl {
+	border-left: 1px solid #DDDDDD;
+}
+
+.bdr {
+	border-right: 1px solid #DDDDDD;
+}
+
+/* .cut_line { */
+/* 	border-bottom: 1px dashed #DDDDDD; */
+/* 	height: 1px; */
+/* } */
+
+.button_plate {
+	width: 100%;
+	border: 0;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.basic_button {
+	cursor: pointer;
+	background-color: #DDDDDD;
+	border: 1px solid #DDDDDD;
+}
+
+
+.hidden {
+	display: none;
 }

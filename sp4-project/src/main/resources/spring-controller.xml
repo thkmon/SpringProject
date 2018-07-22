@@ -9,7 +9,7 @@
 		<property name="maxUploadSize" value="52428800"></property>
 	</bean>
 
-	<bean class="com.thkmon.ddoc.controller.init.InitController" init-method="init"/>
+	<bean class="com.thkmon.ddoc.controller.init.InitController" init-method="init" />
 	<bean class="com.thkmon.ddoc.controller.test.TestController" />
 	<bean class="com.thkmon.ddoc.controller.file.FileUploadController" />
 	<bean class="com.thkmon.ddoc.controller.doc.DocController" />

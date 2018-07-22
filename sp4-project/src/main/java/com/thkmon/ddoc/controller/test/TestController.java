@@ -5,11 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.thkmon.database.mapper.BBMapper;
-import com.thkmon.database.mapper.BBMapperUtil;
-import com.thkmon.database.prototype.BBEntity;
-import com.thkmon.database.prototype.BBEntityList;
+import com.bb.mapper.BBMapper;
+import com.bb.mapper.prototype.BBEntity;
+import com.bb.mapper.prototype.BBEntityList;
+import com.bb.mapper.util.BBMapperUtil;
 import com.thkmon.ddoc.entity.Member;
+import com.thkmon.util.logger.LoggerUtil;
 
 @Controller
 public class TestController {
@@ -23,9 +24,9 @@ public class TestController {
 			member.setAge(100);
 			member.setUserName("wewewe");
 			
-			BBMapper mapper = BBMapperUtil.getInstance();
+			BBMapper mapper = new BBMapper();
 			mapper.insert(member);
-			System.out.println(mapper.getSqlText()); 
+			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,9 +39,9 @@ public class TestController {
 			member.setAge(10000);
 			member.setUserName("wewewe123");
 			
-			BBMapper mapper = BBMapperUtil.getInstance();
+			BBMapper mapper = new BBMapper();
 			mapper.update(member);
-			System.out.println(mapper.getSqlText()); 
+			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,10 +52,10 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBMapper mapper = BBMapperUtil.getInstance();
+			BBMapper mapper = new BBMapper();
 			BBEntity entity = mapper.selectSingleRow(member);
-			System.out.println(mapper.getSqlText()); 
-			System.out.println(BBMapperUtil.convertToString(entity));
+			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
+			LoggerUtil.getInstance().debug(BBMapperUtil.convertToString(entity));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,10 +66,10 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBMapper mapper = BBMapperUtil.getInstance();
+			BBMapper mapper = new BBMapper();
 			int bResult = mapper.delete(member);
-			System.out.println(mapper.getSqlText()); 
-			System.out.println(bResult);
+			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
+			LoggerUtil.getInstance().debug(String.valueOf(bResult));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,10 +80,10 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBMapper mapper = BBMapperUtil.getInstance();
+			BBMapper mapper = new BBMapper();
 			BBEntity entity = mapper.selectSingleRow(member);
-			System.out.println(mapper.getSqlText()); 
-			System.out.println(BBMapperUtil.convertToString(entity));
+			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
+			LoggerUtil.getInstance().debug(BBMapperUtil.convertToString(entity));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,10 +93,10 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBMapper mapper = BBMapperUtil.getInstance();
+			BBMapper mapper = new BBMapper();
 			BBEntityList entityList = mapper.select(member, " SELECT * FROM test_member WHERE age = '100' ");
-			System.out.println(mapper.getSqlText()); 
-			System.out.println(BBMapperUtil.convertToString(entityList));
+			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
+			LoggerUtil.getInstance().debug(BBMapperUtil.convertToString(entityList));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,12 +105,5 @@ public class TestController {
 		// model.addAttribute("greeting", "안녕하세요, " + name);
 		model.addAttribute("greeting", "");
 		return "test";
-	}
-	
-	
-	@RequestMapping("/test/upload")
-	public String testUpload(Model model, @RequestParam(value = "name", required = false) String name) {
-		// model.addAttribute("greeting", "안녕하세요, " + name);
-		return "test/upload";
 	}
 }

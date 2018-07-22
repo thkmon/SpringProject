@@ -1,5 +1,5 @@
-var $b = {};
-$b.empty = function(_obj) {
+var $bb = {};
+$bb.empty = function(_obj) {
 	if (_obj == null || _obj.length < 1) {
 		return true;
 	} else {
@@ -7,17 +7,17 @@ $b.empty = function(_obj) {
 	}
 }
 
-$b.getElem = function(_str) {
-	if ($b.empty(_str)) {
+$bb.getElem = function(_str) {
+	if ($bb.empty(_str)) {
 		return null;
 	}
 	
 	return document.getElementById(_str);
 }
 
-$b.parseInt = function(_str, _default) {
-	if ($b.empty(_str)) {
-		if ($b.empty(_default)) {
+$bb.parseInt = function(_str, _default) {
+	if ($bb.empty(_str)) {
+		if ($bb.empty(_default)) {
 			_str = "0";
 		} else {
 			_str = _default;

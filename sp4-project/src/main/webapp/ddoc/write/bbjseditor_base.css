@@ -1,0 +1,27 @@
+body {
+	margin: 1;
+}
+
+::selection {
+	background: #000000;
+	color: #FFFFFF;
+	text-shadow: none;
+}
+
+::-moz-selection {
+	background: #000000;
+	color: #FFFFFF;
+	text-shadow: none;
+}
+
+::-webkit-selection {
+	background: #000000;
+	color: #FFFFFF;
+	text-shadow: none;
+}
+
+@font-face {
+	/* thanks to Joungkyun. cf. https://github.com/Joungkyun/font-d2coding/releases */
+	font-family: D2Coding; 
+	src: url('/font/D2Coding.woff') format('woff');
+}

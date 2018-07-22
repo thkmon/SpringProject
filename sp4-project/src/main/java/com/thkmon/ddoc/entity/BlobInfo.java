@@ -2,10 +2,10 @@ package com.thkmon.ddoc.entity;
 
 import java.sql.Blob;
 
-import com.thkmon.database.annotation.BBColumn;
-import com.thkmon.database.annotation.BBPrimaryKey;
-import com.thkmon.database.annotation.BBTable;
-import com.thkmon.database.prototype.BBEntity;
+import com.bb.mapper.annotation.BBColumn;
+import com.bb.mapper.annotation.BBPrimaryKey;
+import com.bb.mapper.annotation.BBTable;
+import com.bb.mapper.prototype.BBEntity;
 
 @BBTable(name = "DDOC_BLOB_INFO")
 public class BlobInfo implements BBEntity {
