@@ -29,6 +29,6 @@ public class InitController {
 	
 	@RequestMapping("/")
 	public String goHomepage(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		return "common/empty";
+		return "ddoc/home/home_view";
 	}
 }

@@ -34,8 +34,24 @@ body {
 	border: 1px solid #000000;
 }
 
-.width100per {
+.w100per, .width100per {
 	width: 100%;
+}
+
+.ralign {
+	text-align: right;
+}
+
+.lalign {
+	text-align: left;
+}
+
+.lfloat {
+	float: left;
+}
+
+.rfloat {
+	float: right;
 }
 
 .logo_plate {
@@ -59,6 +75,9 @@ body {
 	
 	padding-top: 10px;
 	padding-bottom: 10px;
+	
+	font-family: 굴림체, 돋움체;
+	font-size: 1em;
 }
 
 .mg2 {
@@ -135,8 +154,11 @@ body {
 
 .basic_button {
 	cursor: pointer;
-	background-color: #DDDDDD;
-	border: 1px solid #DDDDDD;
+	/*background-color: #DDDDDD;*/
+	/*border: 1px solid #DDDDDD;*/
+	
+	font-family: 굴림체, 돋움체;
+	font-size: 1em;
 }
 
 
