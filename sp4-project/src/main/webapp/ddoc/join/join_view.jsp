@@ -11,11 +11,13 @@
 <script type="text/javascript" src="/ddoc/join/join_view.js"></script>
 <script type="text/javascript" src="/ddoc/join/aes_util.js"></script>
 <script type="text/javascript">
+var g_hint = "${hint}";
+
 var g_keySize = 128;
-var iterations = g_iterationCount = 10000;
-var g_salt = "3FF2EC019C627B945225DEBAD71A01B6985FE84C95A70EB132882F88C0A59A55";
-var g_iv = "F27D5C9927726BCEFE7510B1BDD3D137";
-var g_passPhrase = "passPhrase passPhrase aes encoding algorithm";
+var g_iterationCount = 10000;
+var g_salt = "${salt}";
+var g_iv = "${iv}";
+var g_passPhrase = "passPhrase";
 </script>
 </head>
 <body>

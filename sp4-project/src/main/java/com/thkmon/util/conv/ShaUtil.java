@@ -1,10 +1,21 @@
-package com.thkmon.util.data;
+package com.thkmon.util.conv;
 
 import java.security.MessageDigest;
+import java.security.spec.KeySpec;
 
-public class DigestUtil {
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
-	
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+
+public class ShaUtil {
+
+
 	public String convertToMD5(String str) throws Exception {
 		return convertToType(str, "MD5");
 	}
@@ -51,3 +62,10 @@ public class DigestUtil {
 		return result;
 	}
 }
+
+
+
+
+
+
+

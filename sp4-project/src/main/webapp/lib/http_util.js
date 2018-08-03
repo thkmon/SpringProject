@@ -30,7 +30,7 @@ BBHttpObj.prototype.setCallback = function(_func) {
 }
 
 
-BBHttpObj.prototype.addKeyValue = function(_key, _value) {
+BBHttpObj.prototype.addParam = function(_key, _value) {
 	if (this.keyArr == null) {
 		this.keyArr = [];
 	}
@@ -44,10 +44,10 @@ BBHttpObj.prototype.addKeyValue = function(_key, _value) {
 }
 
 
-BBHttpObj.prototype.addInputValue = function(_id) {
+BBHttpObj.prototype.addInputParam = function(_id) {
 	var inputObj = document.getElementById(_id);
 	if (inputObj != null) {
-		this.addKeyValue(_id, inputObj.value);
+		this.addParam(_id, inputObj.value);
 	}
 }
 

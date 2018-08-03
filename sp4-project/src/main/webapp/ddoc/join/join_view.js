@@ -89,11 +89,11 @@ function join_button_onclick() {
 		pringMsg("");
 	}
 	
-	var encValue = "";
+	var encpw = "";
 	
 	try {
 		var aesUtil = new AesUtil(g_keySize, g_iterationCount);
-		encValue = aesUtil.encrypt(g_salt, g_iv, g_passPhrase, pwInput);
+		encpw = aesUtil.encrypt(g_salt, g_iv, g_passPhrase, pwInput);
 	
 	} catch (e) {
 		alert("암호화에 실패하였습니다. [" + e + "]");
@@ -102,9 +102,10 @@ function join_button_onclick() {
 	
 	var hObj = HttpUtil.getInstance();
 	hObj.setUrl("/reqjoin");
-	hObj.addInputValue("email_input");
-	hObj.addInputValue("nick_input");
-	hObj.addKeyValue("encValue", encValue);
+	hObj.addInputParam("email_input");
+	hObj.addInputParam("nick_input");
+	hObj.addParam("encpw", encpw);
+	hObj.addParam("hint", g_hint);
 	hObj.post(function(_result){
 		alert("Dfdf : " + _result);
 	});

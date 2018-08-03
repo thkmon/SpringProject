@@ -29,4 +29,14 @@ public class DateUtil {
 		dateTime.append(String.format("%03d", cal.get(Calendar.MILLISECOND)));
 		return dateTime.toString();
 	}
+	
+	
+	public static String getEndDateTimeMilSec() {
+		return "99999999999999999";
+	}
+	
+	
+	public static String getEndDateTime() {
+		return "99999999999999";
+	}
 }

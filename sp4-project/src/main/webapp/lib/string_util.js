@@ -1,17 +1,32 @@
 var StringUtil = {};
 
 
-StringUtil.checkRegex = function(_str, _oneRegex) {
+StringUtil.checkRegex = function(_str, _oneRegex, _bMatch) {
 	if (_str == null || _str.length == 0) {
 		return false;
+	}
+	
+	if (_oneRegex == null || _oneRegex.length == 0) {
+		return false;
+	}
+	
+	// 매치하는 문자를 찾는지 여부
+	if (_bMatch == null) {
+		_bMatch = true;
 	}
 	
 	var regex = new RegExp(_oneRegex);
 	
 	var len = _str.length;
 	for (var i=0; i<len; i++) {
-		if (!regex.exec(_str.substring(i, i+1))) {
-			return false;
+		if (_bMatch) {
+			if (!regex.exec(_str.substring(i, i+1))) {
+				return false;
+			}
+		} else {
+			if (regex.exec(_str.substring(i, i+1))) {
+				return false;
+			}
 		}
 	}
 	
@@ -33,7 +48,7 @@ StringUtil.checkNameType = function(_str) {
 		return false;
 	}
 	
-	return StringUtil.checkRegex(_str, "[가-힣a-zA-Z0-9]");
+	return StringUtil.checkRegex(_str, "[가-힣a-zA-Z0-9]", true);
 }
 
 
@@ -52,7 +67,8 @@ StringUtil.checkEmailType = function(_str) {
 		return false;
 	}
 	
-	return StringUtil.checkRegex(_str, "[a-zA-Z0-9@]");
+	// 한글은 허용하지 않는다.
+	return StringUtil.checkRegex(_str, "[가-힣]", false);
 }
 
 
