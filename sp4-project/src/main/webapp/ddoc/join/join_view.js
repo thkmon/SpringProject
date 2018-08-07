@@ -107,6 +107,8 @@ function join_button_onclick() {
 	hObj.addParam("encpw", encpw);
 	hObj.addParam("hint", g_hint);
 	hObj.post(function(_result){
-		alert("Dfdf : " + _result);
+		if (_result != null) {
+			alert("가입하였습니다.");
+		}
 	});
 }

@@ -7,6 +7,7 @@ page import="java.io.BufferedInputStream"%><%@
 page import="java.net.URLEncoder"%><%@
 page import="com.thkmon.ddoc.entity.BlobInfo"%><%@
 page import="com.bb.mapper.BBMapper"%><%@
+page import="com.thkmon.database.BBMapperPool"%><%@
 page import="java.io.InputStream"%><%@
 page import="java.sql.Blob"%><%
 
@@ -18,7 +19,7 @@ page import="java.sql.Blob"%><%
 	BlobInfo blobInfo = new BlobInfo();
 	blobInfo.setBlobId(id);
 	
-	BBMapper mapper = new BBMapper();
+	BBMapper mapper = BBMapperPool.getInstance();
 	Object resultObject = mapper.selectSingleRow(blobInfo);
 	if (resultObject == null) {
 		return;
@@ -91,5 +92,4 @@ page import="java.sql.Blob"%><%
 		} finally {
 			inputStream = null;
 		}
-	}
-%>
+	}%>

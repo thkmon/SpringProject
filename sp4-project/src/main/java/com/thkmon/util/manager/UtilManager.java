@@ -7,7 +7,7 @@ public class UtilManager {
 	
 	private static PropertiesUtil propertiesUtil = null;
 	
-	public static PropertiesUtil getConfigUtilInstance() {
+	public static PropertiesUtil getPropertiesUtilInstance() {
 		if (propertiesUtil == null) {
 			propertiesUtil = new PropertiesUtil();
 		}

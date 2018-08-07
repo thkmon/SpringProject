@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.sql.Blob;
 import java.util.Iterator;
 
-import javax.persistence.metamodel.SetAttribute;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,15 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.bb.mapper.BBMapper;
-import com.bb.mapper.util.BBMapperUtil;
+import com.thkmon.database.BBMapperPool;
 import com.thkmon.ddoc.entity.BlobInfo;
 import com.thkmon.util.date.DateUtil;
-import com.thkmon.util.logger.LoggerUtil;
+import com.thkmon.util.log.LogUtil;
 import com.thkmon.util.string.StringUtil;
 
 @Controller
@@ -126,7 +124,7 @@ public class FileUploadController {
 			originFilePath = fileItem.getName();
 		
 		} catch (Exception e) {
-			LoggerUtil.getInstance().debug("FileUploadController fileUpload (getOriginFilePath) : " + e.getMessage());
+			LogUtil.debug("FileUploadController fileUpload (getOriginFilePath) : " + e.getMessage());
 		}
 		
 		String basePath = "ddoc/cache/";
@@ -153,16 +151,16 @@ public class FileUploadController {
 		String isDelete = "0";
 		String isPost = "0";
 		
-		LoggerUtil.getInstance().debug(" BLOB_ID           : " + blobId);
-		LoggerUtil.getInstance().debug(" FILE_BLOB         : " + "");
-		LoggerUtil.getInstance().debug(" FILE_SIZE         : " + fileSize);
-		LoggerUtil.getInstance().debug(" REG_TIME          : " + regTime);
-		LoggerUtil.getInstance().debug(" ORIGIN_FILE_NAME  : " + originFileName);
-		LoggerUtil.getInstance().debug(" ORIGIN_FILE_PATH  : " + originFilePath);
-		LoggerUtil.getInstance().debug(" CACHE_FILE_NAME   : " + cacheFileName);
-		LoggerUtil.getInstance().debug(" CACHE_FILE_PATH   : " + cacheFilePath);
-		LoggerUtil.getInstance().debug(" IS_DELETE         : " + isDelete);
-		LoggerUtil.getInstance().debug(" IS_POST           : " + isPost);
+		LogUtil.debug(" BLOB_ID           : " + blobId);
+		LogUtil.debug(" FILE_BLOB         : " + "");
+		LogUtil.debug(" FILE_SIZE         : " + fileSize);
+		LogUtil.debug(" REG_TIME          : " + regTime);
+		LogUtil.debug(" ORIGIN_FILE_NAME  : " + originFileName);
+		LogUtil.debug(" ORIGIN_FILE_PATH  : " + originFilePath);
+		LogUtil.debug(" CACHE_FILE_NAME   : " + cacheFileName);
+		LogUtil.debug(" CACHE_FILE_PATH   : " + cacheFilePath);
+		LogUtil.debug(" IS_DELETE         : " + isDelete);
+		LogUtil.debug(" IS_POST           : " + isPost);
 		
 //		byte[] fileBlob = convertFileToBlob(resultFile);
 		
@@ -185,9 +183,9 @@ public class FileUploadController {
 		
 		// JPAMapper.getInstance().insert(DdocBlobInfo.class, ddocBlobInfo);
 		
-		BBMapper mapper = new BBMapper();
+		BBMapper mapper = BBMapperPool.getInstance();
 		mapper.insert(ddocBlobInfo);
-		LoggerUtil.getInstance().debug(mapper.getSqlText());
+		LogUtil.debug(mapper.getSqlText());
 		
 		return ddocBlobInfo;
 	}

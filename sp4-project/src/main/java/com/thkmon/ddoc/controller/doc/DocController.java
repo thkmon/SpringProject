@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.thkmon.util.logger.LoggerUtil;
+import com.thkmon.util.log.LogUtil;
 
 @Controller
 public class DocController {
@@ -21,8 +21,8 @@ public class DocController {
 	@RequestMapping("/write")
 	public String write(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
-		LoggerUtil.getInstance().debug("ddoc/write/write_doc");
-		LoggerUtil.getInstance().debug("1111");
+		LogUtil.debug("ddoc/write/write_doc");
+		LogUtil.debug("1111");
 		
 		return "ddoc/write/write_doc";
 	}
@@ -31,7 +31,7 @@ public class DocController {
 	@RequestMapping("/ddoc/write")
 	public String ddocWrite(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
-		LoggerUtil.getInstance().debug("ddoc/write/index");
+		LogUtil.debug("ddoc/write/index");
 		
 		return "ddoc/write/index";
 	}
@@ -40,7 +40,7 @@ public class DocController {
 	@RequestMapping("/ddoc/test/upload")
 	public String ddocTestUpload(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
-		LoggerUtil.getInstance().debug("ddoc/test/upload");
+		LogUtil.debug("ddoc/test/upload");
 		
 		return "ddoc/test/upload";
 	}

@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bb.logger.BBLogger;
 import com.bb.logger.BBLoggerExample;
 import com.thkmon.ddoc.service.member.MemberService;
+import com.thkmon.exception.MsgException;
 import com.thkmon.util.conv.AesUtil;
 import com.thkmon.util.conv.ShaUtil;
 import com.thkmon.util.data.ReqInfo;
 import com.thkmon.util.date.DateUtil;
 import com.thkmon.util.log.LogUtil;
+import com.thkmon.util.result.ResultUtil;
 
 @Controller
 public class MemberController {
@@ -49,6 +51,9 @@ public class MemberController {
 			String encpw = reqInfo.getParamNotEmpty("encpw");
 			String hint = reqInfo.getParamNotEmpty("hint");
 			
+			reqInfo.checkAllMarked();
+			emailInput = emailInput.toLowerCase();
+			
 			AesUtil aesUtil = new AesUtil();
 			String passwd = aesUtil.decrypt(hint, encpw);
 			
@@ -57,16 +62,20 @@ public class MemberController {
 			LogUtil.debug("encpw : " + encpw);
 			LogUtil.debug("sha256password : " + sha256password);
 			
-			reqInfo.checkAllMarked();
-			
-			new MemberService().addMember(emailInput, nickInput, sha256password);
+			boolean bResult = new MemberService().addMember(emailInput, nickInput, sha256password);
+			if (!bResult) {
+				return ResultUtil.makeErrorJSON("알 수 없는 오류가 발생하였습니다.");
+			}
 			
 			LogUtil.debug("[end] reqjoin");
-		
+			
+		} catch (MsgException e) {
+			return ResultUtil.makeErrorJSON(e);
+			
 		} catch (Exception e) {
 			throw e;
 		}
 		
-		return "ddoc/join/join_view";
+		return ResultUtil.makeSuccessJSON();
 	}
 }

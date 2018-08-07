@@ -25,6 +25,10 @@ public class AesUtil {
 	
 	private final Cipher cipher;
 	
+	private static final String defaultSalt = "c578fdbd2f1a0b6d2c48908a5ff0df565be0009833d1d0aaec9efed8a6ebf3e0";
+	private static final String defaultIv = "0847c1ad2829b3dda6630a71e7ad4aa2";
+	private static final String defaultPassPhrase = "";
+	
 	
 	public synchronized static String getSalt() {
 		if (salt == null) {
@@ -71,6 +75,16 @@ public class AesUtil {
 	public String decrypt(String hint, String ciphertext) throws Exception {
 		String iv = hintMap.get(hint);
 		return decrypt(salt, iv, passPhrase, ciphertext);
+	}
+	
+	
+	public String encrypt(String plaintext) throws Exception {
+		return encrypt(defaultSalt, defaultIv, defaultPassPhrase, plaintext);
+	}
+	
+	
+	public String decrypt(String ciphertext) throws Exception {
+		return decrypt(defaultSalt, defaultIv, defaultPassPhrase, ciphertext);
 	}
 	
 	

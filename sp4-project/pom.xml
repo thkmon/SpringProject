@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>bb</groupId>
 			<artifactId>BBMapper</artifactId>
-			<version>1.0</version>
+			<version>1.4</version>
 		</dependency>
 	
 		<!-- 스프링 -->

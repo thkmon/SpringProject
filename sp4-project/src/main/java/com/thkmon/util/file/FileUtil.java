@@ -22,14 +22,12 @@ public class FileUtil {
 		InputStreamReader isr = null;
 		BufferedReader reader = null;
 		
-		File file = null;
+		File file = new File(filePath);
+		if (!file.exists() || !file.isFile()) {
+			throw new Exception("FileUtil readFile : !file.exists() || !file.isFile() [" + file.getAbsolutePath() + "]");
+		}
 		
 		try {
-			file = new File(filePath);
-			if (!file.exists() || !file.isFile()) {
-				throw new Exception("FileUtil readFile : !file.exists() || !file.isFile() [" + file.getAbsolutePath() + "]");
-			}
-			
 			fis = new FileInputStream(file);
 			isr = new InputStreamReader(fis, "UTF-8");
 			reader = new BufferedReader(isr);
@@ -53,6 +51,7 @@ public class FileUtil {
 			close(reader);
 			close(isr);
 			close(fis);
+			throw e;
 		}
 		
 		return fileInfo;

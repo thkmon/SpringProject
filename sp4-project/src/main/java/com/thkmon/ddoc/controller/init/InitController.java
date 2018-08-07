@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bb.logger.BBLogger;
+import com.thkmon.database.BBMapperPool;
 import com.thkmon.util.log.LogUtil;
-import com.thkmon.util.logger.LoggerUtil;
 
 @Controller
 public class InitController {
@@ -24,9 +23,16 @@ public class InitController {
 			bInit = true;
 		}
 		
-		new LogUtil();
+		try {
+			LogUtil.init();
+			BBMapperPool.init("ddoc/props/pool.properties");
 		
-		LoggerUtil.getInstance().debug("Loading...");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		
+		LogUtil.debug("Loading...");
 	}
 	
 	

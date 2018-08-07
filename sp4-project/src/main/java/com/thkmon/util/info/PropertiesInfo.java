@@ -23,4 +23,21 @@ public class PropertiesInfo {
 		
 		return value;
 	}
+	
+	
+	public int getInt(String key) {
+		int iValue = 0;
+		String value = get(key);
+		
+		try {
+			if (value != null) {
+				iValue = Integer.parseInt(value);
+			}
+		} catch (Exception e) {
+			// 무시
+			iValue = 0;
+		}
+
+		return iValue;
+	}
 }

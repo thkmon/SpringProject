@@ -9,8 +9,9 @@ import com.bb.mapper.BBMapper;
 import com.bb.mapper.prototype.BBEntity;
 import com.bb.mapper.prototype.BBEntityList;
 import com.bb.mapper.util.BBMapperUtil;
+import com.thkmon.database.BBMapperPool;
 import com.thkmon.ddoc.entity.Member;
-import com.thkmon.util.logger.LoggerUtil;
+import com.thkmon.util.log.LogUtil;
 
 @Controller
 public class TestController {
@@ -24,9 +25,9 @@ public class TestController {
 			member.setAge(100);
 			member.setUserName("wewewe");
 			
-			BBMapper mapper = new BBMapper();
+			BBMapper mapper = BBMapperPool.getInstance();
 			mapper.insert(member);
-			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
+			LogUtil.debug(mapper.getSqlText()); 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -39,9 +40,9 @@ public class TestController {
 			member.setAge(10000);
 			member.setUserName("wewewe123");
 			
-			BBMapper mapper = new BBMapper();
+			BBMapper mapper = BBMapperPool.getInstance();
 			mapper.update(member);
-			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
+			LogUtil.debug(mapper.getSqlText()); 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,10 +53,10 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBMapper mapper = new BBMapper();
+			BBMapper mapper = BBMapperPool.getInstance();
 			BBEntity entity = mapper.selectSingleRow(member);
-			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
-			LoggerUtil.getInstance().debug(BBMapperUtil.convertToString(entity));
+			LogUtil.debug(mapper.getSqlText()); 
+			LogUtil.debug(BBMapperUtil.convertToString(entity));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,10 +67,10 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBMapper mapper = new BBMapper();
+			BBMapper mapper = BBMapperPool.getInstance();
 			int bResult = mapper.delete(member);
-			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
-			LoggerUtil.getInstance().debug(String.valueOf(bResult));
+			LogUtil.debug(mapper.getSqlText()); 
+			LogUtil.debug(String.valueOf(bResult));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,10 +81,10 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBMapper mapper = new BBMapper();
+			BBMapper mapper = BBMapperPool.getInstance();
 			BBEntity entity = mapper.selectSingleRow(member);
-			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
-			LoggerUtil.getInstance().debug(BBMapperUtil.convertToString(entity));
+			LogUtil.debug(mapper.getSqlText()); 
+			LogUtil.debug(BBMapperUtil.convertToString(entity));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,10 +94,10 @@ public class TestController {
 			Member member = new Member();
 			member.setId("test_id");
 			
-			BBMapper mapper = new BBMapper();
+			BBMapper mapper = BBMapperPool.getInstance();
 			BBEntityList entityList = mapper.select(member, " SELECT * FROM test_member WHERE age = '100' ");
-			LoggerUtil.getInstance().debug(mapper.getSqlText()); 
-			LoggerUtil.getInstance().debug(BBMapperUtil.convertToString(entityList));
+			LogUtil.debug(mapper.getSqlText()); 
+			LogUtil.debug(BBMapperUtil.convertToString(entityList));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

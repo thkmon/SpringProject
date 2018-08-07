@@ -96,7 +96,35 @@ BBHttpObj.prototype.post = function(_callbackFunc) {
 		data : params, 
 		success : function(_result) {
 			if (_this.callbackFunc != null && typeof(_this.callbackFunc) == "function") {
-				_this.callbackFunc(_result);
+				if (_result != null && _result.length > 0) {
+					_result = HttpUtil.decode(_result);
+					
+					if (HttpUtil.startsWith(_result, "{") && HttpUtil.endsWith(_result, "}")) {
+						_result = JSON.parse(_result);
+						if (_result.result == 1) {
+							if (_result.info != null) {
+								_this.callbackFunc(_result.info);
+							} else {
+								_this.callbackFunc(true);
+							}
+							return true;
+							
+						} else {
+							var msg = _result.message;
+							if (msg == null || msg.length == 0) {
+								msg = "오류가 발생하였습니다.";
+							}
+							
+							alert(msg);
+							
+							_this.callbackFunc(null);
+							return null;
+						}
+					}
+				}
+				
+				_this.callbackFunc(null);
+				return null;
 			}
 		}, 
 		// beforeSend : showRequest, 
@@ -104,4 +132,47 @@ BBHttpObj.prototype.post = function(_callbackFunc) {
 			alert(e.responseText); 
 		} 
 	 });
+}
+
+
+HttpUtil.decode = function(_s) {
+	return decodeURIComponent(_s.replace(/\+/g, ' '));
+}
+
+
+HttpUtil.startsWith = function(_s, _strToFind) {
+	if (_s == null || _s.length == 0) {
+		return false;
+	}
+	
+	var len = _s.length;
+	var lenToFind = _strToFind.length;
+	if (len < lenToFind) {
+		return false;
+	}
+	
+	if (_s.substring(0, lenToFind) == _strToFind) {
+		return true;
+	}
+	
+	return false;
+}
+
+
+HttpUtil.endsWith = function(_s, _strToFind) {
+	if (_s == null || _s.length == 0) {
+		return false;
+	}
+	
+	var len = _s.length;
+	var lenToFind = _strToFind.length;
+	if (len < lenToFind) {
+		return false;
+	}
+	
+	if (_s.substring(len - lenToFind, len) == _strToFind) {
+		return true;
+	}
+	
+	return false;
 }
