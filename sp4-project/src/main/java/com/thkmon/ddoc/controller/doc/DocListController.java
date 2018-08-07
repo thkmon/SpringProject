@@ -6,12 +6,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.thkmon.ddoc.service.doc.DocListService;
+
 @Controller
 public class DocListController {
 	
-//	@RequestMapping("/imsi")
-//	public String viewDoc(HttpServletRequest req, HttpServletResponse res) throws Exception {
-//		
-//		return "ddoc/doc/doc_view";
-//	}
+	@RequestMapping("/")
+	public String docList(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		
+		DocListService docListService = new DocListService();
+		docListService.getDocList();
+		
+		return "ddoc/home/home_view";
+	}
 }

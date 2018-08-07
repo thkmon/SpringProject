@@ -84,7 +84,7 @@ BBHttpObj.prototype.post = function(_callbackFunc) {
 			params += "&";
 		}
 
-		alert(oneKey + " " + oneValue)
+		// alert(oneKey + " " + oneValue);
 		params += encodeURIComponent(oneKey) + "=" + encodeURIComponent(oneValue);
 	}
 	

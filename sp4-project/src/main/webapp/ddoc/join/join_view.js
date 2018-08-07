@@ -100,6 +100,8 @@ function join_button_onclick() {
 		return false;
 	}
 	
+	document.getElementById("join_button").disabled = true;
+	
 	var hObj = HttpUtil.getInstance();
 	hObj.setUrl("/reqjoin");
 	hObj.addInputParam("email_input");
@@ -110,5 +112,7 @@ function join_button_onclick() {
 		if (_result != null) {
 			alert("가입하였습니다.");
 		}
+		
+		document.getElementById("join_button").disabled = false;
 	});
 }

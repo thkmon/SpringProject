@@ -34,10 +34,4 @@ public class InitController {
 		
 		LogUtil.debug("Loading...");
 	}
-	
-	
-	@RequestMapping("/")
-	public String goHomepage(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		return "ddoc/home/home_view";
-	}
 }

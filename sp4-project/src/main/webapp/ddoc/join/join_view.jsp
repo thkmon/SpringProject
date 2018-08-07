@@ -51,7 +51,7 @@ var g_passPhrase = "passPhrase";
 		<br>
 		<br>
 <!-- 		<div class="lfloat"> -->
-			<input type="button" class="basic_button" value="가입" onclick="join_button_onclick()"/>
+			<input type="button" id="join_button" class="basic_button" value="가입" onclick="join_button_onclick()"/>
 <!-- 		</div> -->
 <!-- 		<div class="rfloat"> -->
 <!-- 			<input type="button" class="basic_button" value="홈" onclick="home_button_onclick()"/> -->
