@@ -13,6 +13,9 @@
 	<bean class="com.thkmon.ddoc.controller.test.TestController" />
 	<bean class="com.thkmon.ddoc.controller.file.FileUploadController" />
 	<bean class="com.thkmon.ddoc.controller.doc.DocController" />
+	<bean class="com.thkmon.ddoc.controller.doc.DocListController" />
+	<bean class="com.thkmon.ddoc.controller.doc.DocReadController" />
+	<bean class="com.thkmon.ddoc.controller.doc.DocWriteController" />
 	
 	<bean class="com.thkmon.ddoc.controller.member.MemberController" />
 </beans>

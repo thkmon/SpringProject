@@ -56,11 +56,10 @@ public class MemberController {
 			
 			AesUtil aesUtil = new AesUtil();
 			String passwd = aesUtil.decrypt(hint, encpw);
-			
 			String sha256password = new ShaUtil().convertToSHA256(passwd);
 			
-			LogUtil.debug("encpw : " + encpw);
-			LogUtil.debug("sha256password : " + sha256password);
+			LogUtil.debug("emailInput : " + emailInput);
+			LogUtil.debug("nickInput : " + nickInput);
 			
 			boolean bResult = new MemberService().addMember(emailInput, nickInput, sha256password);
 			if (!bResult) {
